@@ -1,0 +1,8 @@
+ru:
+  active_admin:
+    sortable:
+      column: 'Сортировка'
+      up: "Поднять"
+      down: "Опустить"
+      to_top: "Наверх"
+      to_bottom: "Вниз"

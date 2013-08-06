@@ -10,6 +10,26 @@ module ActiveAdmin
           resource.insert_at params[:position].to_i
           head 200
         end
+
+        member_action :up do
+          resource.move_higher
+          redirect_to collection_path(params.except(:controller, :action, :order))
+        end
+
+        member_action :down do
+          resource.move_lower
+          redirect_to collection_path(params.except(:controller, :action, :order))
+        end
+
+        member_action :to_top do
+          resource.move_to_top
+          redirect_to collection_path(params.except(:controller, :action, :order))
+        end
+
+        member_action :to_bottom do
+          resource.move_to_bottom
+          redirect_to collection_path(params.except(:controller, :action, :order))
+        end
       end
     end
 
@@ -22,10 +42,32 @@ module ActiveAdmin
           content_tag :span, HANDLE, :class => 'handle', 'data-sort-url' => sort_url
         end
       end
+
+      def sortable_actions(options = {})
+        options = { name: I18n.t('active_admin.sortable.column') }.merge(options)
+
+        column options[:name] do |resource|
+          links = ''.html_safe
+          links << link_to(I18n.t('active_admin.sortable.to_top'), "#{resource_path(resource)}/to_top?#{params.except(:controller, :action, :order).to_query}", class: 'member_link')
+          links << link_to(I18n.t('active_admin.sortable.up'), "#{resource_path(resource)}/up?#{params.except(:controller, :action, :order).to_query}", class: 'member_link')
+          links << link_to(I18n.t('active_admin.sortable.down'), "#{resource_path(resource)}/down?#{params.except(:controller, :action, :order).to_query}", class: 'member_link')
+          links << link_to(I18n.t('active_admin.sortable.to_bottom'), "#{resource_path(resource)}/to_bottom?#{params.except(:controller, :action, :order).to_query}", class: 'member_link')
+          links
+        end
+      end
     end
 
     ::ActiveAdmin::ResourceDSL.send(:include, ControllerActions)
     ::ActiveAdmin::Views::TableFor.send(:include, TableMethods)
+
+    class Railtie < ::Rails::Railtie
+      config.after_initialize do
+        require 'active_support/i18n'
+        I18n.load_path += Dir[File.expand_path('../activeadmin-sortable/locales/*.yml', __FILE__)]
+
+        puts File.expand_path('../activeadmin-sortable/locales/*.yml', __FILE__).inspect
+      end
+    end
 
     class Engine < ::Rails::Engine
       # Including an Engine tells Rails that this gem contains assets

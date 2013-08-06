@@ -1,0 +1,8 @@
+en:
+  active_admin:
+    sortable:
+      column: 'Sort'
+      up: "Up"
+      down: "Down"
+      to_up: "To up"
+      to_bottom: "To bottom"
