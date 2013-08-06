@@ -1,2 +1,3 @@
 .activeadmin-sortable { width: 5px; }
 .activeadmin-sortable .handle { cursor: ns-resize; }
+.ui-state-highlight { display: table-row; height: 36px; }

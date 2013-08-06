@@ -6,8 +6,10 @@ module ActiveAdmin
   module Sortable
     module ControllerActions
       def sortable
+        config.sort_order = :position
+        
         member_action :sort, :method => :post do
-          resource.insert_at params[:position].to_i
+          params[:position].to_i > 0 ? resource.insert_at(params[:position].to_i) : resource.move_to_top
           head 200
         end
 
@@ -39,7 +41,7 @@ module ActiveAdmin
       def sortable_handle_column
         column '', :class => "activeadmin-sortable" do |resource|
           sort_url = "#{resource_path(resource)}/sort"
-          content_tag :span, HANDLE, :class => 'handle', 'data-sort-url' => sort_url
+          content_tag :span, HANDLE, class: 'handle', data: { url: sort_url, position: resource.position }
         end
       end
 

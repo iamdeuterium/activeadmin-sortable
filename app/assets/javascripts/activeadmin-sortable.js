@@ -17,10 +17,12 @@
             axis: "y",
             placeholder: "ui-state-highlight",
             update: function (event, ui) {
+                el = ui.item.prev()
+
                 $.ajax({
-                    url: ui.item.find('[data-sort-url]').data('sort-url'),
+                    url: ui.item.find('[data-url]').data('url'),
                     type: 'post',
-                    data: { position: ui.item.index() + 1 },
+                    data: { position: el.find('[data-url]').data('position') },
                     success: function () {
                         window.location.reload()
                     }
