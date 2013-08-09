@@ -7,7 +7,7 @@ module ActiveAdmin
     module ControllerActions
       def sortable
         config.sort_order = :position
-        
+
         member_action :sort, :method => :post do
           params[:position].to_i > 0 ? resource.insert_at(params[:position].to_i) : resource.move_to_top
           head 200
@@ -66,8 +66,6 @@ module ActiveAdmin
       config.after_initialize do
         require 'active_support/i18n'
         I18n.load_path += Dir[File.expand_path('../activeadmin-sortable/locales/*.yml', __FILE__)]
-
-        puts File.expand_path('../activeadmin-sortable/locales/*.yml', __FILE__).inspect
       end
     end
 
